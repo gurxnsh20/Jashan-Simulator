@@ -1,0 +1,25 @@
+{
+  "appId": "com.aulakhmotors.jashansim",
+  "appName": "Jashan's Simulator (AM)",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "buildOptions": {
+      "keystorePath": null,
+      "keystoreAlias": null
+    },
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "backgroundColor": "#991B1B",
+      "showSpinner": false
+    }
+  }
+}

@@ -1,0 +1,1434 @@
+/* ==========================================================================
+   Jashan's Simulator (AM) — Full-Screen 3D Portrait Mobile Game Stylesheet
+   Strict Layout Rules:
+   - body: width: 100vw; height: 100vh; overflow: hidden; (NO SCROLLING)
+   - Three.js <canvas>: position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0;
+   - Screen 1: Main Menu | Screen 2: Day Selection (1-90) | Screen 3: Active Gameplay HUD
+   - Minimal transparent floating overlays (position: absolute; z-index: 10;)
+   - Centered popup modals over blurred 3D background for Mini-Games & OTP Lock
+   ========================================================================== */
+
+:root {
+  --am-red: #DC2626;
+  --am-red-dark: #991B1B;
+  --am-gold: #FBBF24;
+  --am-emerald: #10B981;
+  --am-slate-dark: #0F172A;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #0F172A;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #F8FAFC;
+  position: fixed;
+  inset: 0;
+  touch-action: none;
+}
+
+/* ==========================================================================
+   1. FULL-SCREEN THREE.JS 3D CANVAS (z-index: 0)
+   ========================================================================== */
+#three-canvas-container,
+#three-canvas-container canvas {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 0 !important;
+  display: block;
+}
+
+/* ==========================================================================
+   2. UI STATE MACHINE SCREENS (z-index: 10)
+   ========================================================================== */
+.ui-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  display: none;
+  pointer-events: none;
+}
+
+.ui-screen.active-screen {
+  display: flex;
+}
+
+/* ==========================================================================
+   SCREEN 1: MAIN MENU
+   ========================================================================== */
+#screen-main-menu {
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, rgba(15, 23, 42, 0.35) 0%, rgba(15, 23, 42, 0.82) 100%);
+  backdrop-filter: blur(3px);
+  padding: 20px;
+  pointer-events: auto;
+}
+
+.main-menu-card {
+  width: 100%;
+  max-width: 390px;
+  background: rgba(15, 23, 42, 0.86);
+  border: 3px solid var(--am-gold);
+  border-radius: 28px;
+  padding: 36px 26px;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 30px rgba(220, 38, 38, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.am-tiger-emblem {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FEF3C7 0%, #F59E0B 75%, #B45309 100%);
+  border: 4px solid #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.4rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.am-brand-tag {
+  background: rgba(220, 38, 38, 0.28);
+  border: 1px solid #F87171;
+  color: #FCA5A5;
+  padding: 4px 14px;
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.am-main-title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #FFFFFF;
+  text-shadow: 0 4px 0 #7F1D1D, 0 0 18px rgba(251, 191, 36, 0.5);
+  line-height: 1.05;
+}
+
+.am-subtitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #FDE68A;
+  margin-bottom: 12px;
+}
+
+.btn-start-game-hero {
+  width: 100%;
+  background: linear-gradient(180deg, #EF4444 0%, #B91C1C 100%);
+  color: #FFFFFF;
+  border: 3px solid var(--am-gold);
+  border-radius: 18px;
+  padding: 18px 24px;
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(220, 38, 38, 0.55), inset 0 2px 0 rgba(255, 255, 255, 0.35);
+  transition: transform 0.15s ease;
+}
+
+.btn-start-game-hero:active {
+  transform: scale(0.96);
+}
+
+/* ==========================================================================
+   SCREEN 2: DAY SELECTION (1 to 90 Grid)
+   ========================================================================== */
+#screen-day-select {
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 16px;
+  pointer-events: auto;
+}
+
+.day-select-dialog {
+  width: 100%;
+  max-width: 520px;
+  height: 86vh;
+  background: rgba(15, 23, 42, 0.95);
+  border: 2px solid #334155;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
+}
+
+.day-select-header {
+  padding: 16px 18px;
+  background: linear-gradient(135deg, #B91C1C 0%, #7F1D1D 100%);
+  border-bottom: 2px solid var(--am-gold);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.day-select-title-group h2 {
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  color: #FFFFFF;
+}
+
+.day-select-title-group small {
+  font-size: 0.68rem;
+  color: #FDE68A;
+  display: block;
+}
+
+.btn-icon-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #FFFFFF;
+  font-size: 1.1rem;
+  font-weight: 900;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.btn-practice-pill {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--am-gold);
+  color: #FEF3C7;
+  padding: 6px 11px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.day-select-grid {
+  flex: 1;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  overflow-y: auto;
+  touch-action: pan-y;
+}
+
+.day-grid-btn {
+  border-radius: 14px;
+  padding: 10px 6px;
+  border: 2px solid #334155;
+  background: #1E293B;
+  color: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  min-height: 68px;
+  transition: transform 0.12s ease;
+}
+
+.day-grid-btn:active {
+  transform: scale(0.95);
+}
+
+.day-grid-btn.day-unlocked {
+  border-color: #10B981;
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.22) 0%, rgba(6, 78, 59, 0.65) 100%);
+}
+
+.day-grid-btn.day-unlocked.day-boss-big {
+  border-color: #EF4444;
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.32) 0%, rgba(127, 29, 29, 0.75) 100%);
+}
+
+.day-grid-btn.day-unlocked.day-boss-small {
+  border-color: #F59E0B;
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.28) 0%, rgba(120, 53, 15, 0.75) 100%);
+}
+
+.day-grid-btn.day-current-glow {
+  box-shadow: 0 0 0 3px var(--am-gold), 0 0 16px rgba(251, 191, 36, 0.55);
+}
+
+.day-grid-btn.day-locked {
+  opacity: 0.38;
+  background: #0F172A;
+  border-color: #1E293B;
+  color: #64748B;
+  cursor: not-allowed;
+}
+
+.day-num-txt {
+  font-size: 0.88rem;
+  font-weight: 900;
+}
+
+.day-icon-txt {
+  font-size: 1.05rem;
+}
+
+.day-stars-txt {
+  font-size: 0.56rem;
+  color: var(--am-gold);
+}
+
+/* ==========================================================================
+   SCREEN 3: ACTIVE GAMEPLAY FLOATING HUD OVERLAYS (z-index: 10, transparent)
+   ========================================================================== */
+.gameplay-overlay-screen {
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Top Left: Minimal HUD (Current Day, Stamina Bar, Treasury) */
+.hud-top-left {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 20;
+  background: rgba(15, 23, 42, 0.74);
+  backdrop-filter: blur(6px);
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 195px;
+  max-width: 265px;
+  pointer-events: auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.hud-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.hud-day-chip {
+  background: var(--am-red);
+  color: #FFFFFF;
+  font-weight: 900;
+  font-size: 0.76rem;
+  padding: 3px 9px;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+}
+
+.hud-cash-chip {
+  color: #34D399;
+  font-weight: 900;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+}
+
+.hud-stamina-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stam-bolt {
+  font-size: 0.85rem;
+}
+
+.hud-stamina-track {
+  flex: 1;
+  height: 9px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.hud-stamina-bar {
+  height: 100%;
+  background: #10B981;
+  transition: width 0.2s ease, background 0.2s ease;
+}
+
+.stam-pct {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #E2E8F0;
+  min-width: 32px;
+  text-align: right;
+}
+
+.hud-objective-chip {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #FDE68A;
+  padding-top: 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  line-height: 1.25;
+}
+
+/* Top Right: Small Pause / Settings Icon */
+.hud-top-right {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.btn-pause-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.76);
+  backdrop-filter: blur(6px);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  color: #FFFFFF;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.btn-pause-icon:active {
+  transform: scale(0.92);
+}
+
+/* Right Half of Screen: Camera Rotation Touch Zone */
+.camera-look-zone {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 55vw;
+  height: 100vh;
+  z-index: 12;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+/* Bottom Left: Virtual Joystick (Transparent Overlay) */
+.virtual-joystick-zone {
+  position: absolute;
+  left: 22px;
+  bottom: 26px;
+  width: 132px;
+  height: 132px;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.virtual-joystick-base {
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(15, 23, 42, 0.48) 100%);
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  position: relative;
+  backdrop-filter: blur(2px);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.virtual-joystick-base.joystick-active {
+  border-color: var(--am-gold);
+  box-shadow: 0 0 22px rgba(251, 191, 36, 0.45);
+}
+
+.joystick-compass-ring {
+  position: absolute;
+  inset: 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.virtual-joystick-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #F87171 0%, #DC2626 60%, #991B1B 100%);
+  border: 2.5px solid var(--am-gold);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+/* Bottom Right: Large "INTERACT" Button (Only appears near interactive objects) */
+.btn-3d-interact {
+  position: absolute;
+  right: 22px;
+  bottom: 32px;
+  z-index: 30;
+  background: linear-gradient(135deg, #10B981 0%, #047857 100%);
+  border: 3px solid var(--am-gold);
+  border-radius: 22px;
+  padding: 14px 20px;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 22px rgba(16, 185, 129, 0.55);
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.btn-3d-interact:active {
+  transform: scale(0.95);
+}
+
+.interact-hidden {
+  opacity: 0;
+  pointer-events: none !important;
+  transform: translateY(16px) scale(0.9);
+}
+
+.interact-pulse-ready {
+  animation: pulseInteractBtn 0.85s ease-in-out infinite alternate;
+}
+
+@keyframes pulseInteractBtn {
+  from { box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 12px rgba(251, 191, 36, 0.4); }
+  to { box-shadow: 0 10px 32px rgba(0, 0, 0, 0.75), 0 0 28px rgba(251, 191, 36, 0.95); }
+}
+
+.interact-icon {
+  font-size: 1.65rem;
+  background: rgba(0, 0, 0, 0.25);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.interact-copy {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.interact-copy strong {
+  font-size: 0.92rem;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  color: #FEF3C7;
+}
+
+.interact-copy small {
+  font-size: 0.7rem;
+  color: #D1FAE5;
+}
+
+/* Floating 2D Patience Meters Above 3D Customer Heads */
+.floating-3d-labels-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+}
+
+.floating-3d-cust-badge {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  background: rgba(15, 23, 42, 0.9);
+  border: 2px solid var(--am-gold);
+  border-radius: 10px;
+  padding: 4px 9px;
+  color: #FFF;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 105px;
+  pointer-events: auto;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55);
+}
+
+.floating-bar-track {
+  width: 100%;
+  height: 6px;
+  background: #334155;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.floating-bar-fill {
+  height: 100%;
+  background: #10B981;
+}
+
+/* ==========================================================================
+   4. CENTERED POPUP MODALS OVER BLURRED 3D BACKGROUND (z-index: 1000)
+   ========================================================================== */
+.game-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.68);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  pointer-events: auto;
+}
+
+.boss-3d-peek-backdrop {
+  background: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(3px) !important;
+}
+
+.game-modal-card {
+  background: #FFFFFF;
+  color: #1E293B;
+  border-radius: 22px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  touch-action: pan-y;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+  border: 2px solid #CBD5E1;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header-bar {
+  padding: 12px 16px;
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.red-header { background: linear-gradient(135deg, #DC2626, #991B1B); }
+.amber-header { background: linear-gradient(135deg, #D97706, #92400E); }
+.emerald-header { background: linear-gradient(135deg, #059669, #065F46); }
+
+.phase-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 3px 8px;
+  border-radius: 99px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.tries-pill {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 5px 11px;
+  border-radius: 99px;
+  font-weight: 800;
+  font-size: 0.78rem;
+}
+
+.btn-close-modal {
+  background: rgba(0, 0, 0, 0.3);
+  color: #FFF;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.modal-instruction {
+  padding: 10px 16px;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+  font-size: 0.8rem;
+  color: #334155;
+  line-height: 1.35;
+}
+
+/* OTP Lock Split Stage */
+.otp-split-stage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 14px;
+}
+
+@media (max-width: 640px) {
+  .otp-split-stage {
+    grid-template-columns: 1fr;
+  }
+}
+
+.otp-phone-mockup {
+  background: #0F172A;
+  border: 3px solid #334155;
+  border-radius: 20px;
+  padding: 10px;
+  color: #FFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.phone-notch {
+  width: 50px;
+  height: 6px;
+  background: #334155;
+  border-radius: 99px;
+  margin-bottom: 6px;
+}
+
+.phone-screen {
+  width: 100%;
+  background: #1E293B;
+  border-radius: 14px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.phone-top-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: #94A3B8;
+}
+
+.phone-sms-card {
+  background: #0F172A;
+  border: 1px solid #3B82F6;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.sms-sender {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #60A5FA;
+  margin-bottom: 3px;
+}
+
+.sms-label {
+  font-size: 0.72rem;
+  color: #CBD5E1;
+  margin-bottom: 6px;
+}
+
+.otp-code-display {
+  font-size: 1.85rem;
+  font-weight: 900;
+  letter-spacing: 5px;
+  color: #FBBF24;
+  background: #1E293B;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-family: monospace;
+}
+
+.otp-hidden-code { color: #64748B; }
+
+.otp-timer-track {
+  width: 100%;
+  height: 7px;
+  background: #334155;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.otp-timer-fill {
+  height: 100%;
+  background: #10B981;
+}
+
+.otp-shutter-panel {
+  background: #E2E8F0;
+  border: 2px solid #64748B;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.shutter-housing-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.otp-keypad-screen {
+  width: 100%;
+  background: #0F172A;
+  color: #38BDF8;
+  font-family: monospace;
+  font-size: 1.55rem;
+  font-weight: 900;
+  text-align: center;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 2px solid #334155;
+}
+
+.screen-success { color: #34D399; border-color: #10B981; }
+.screen-error { color: #F87171; border-color: #EF4444; }
+
+.otp-numpad-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.otp-key-btn {
+  background: #FFFFFF;
+  border: 2px solid #94A3B8;
+  border-radius: 10px;
+  padding: 9px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0F172A;
+  cursor: pointer;
+  box-shadow: 0 2px 0 #64748B;
+}
+
+.otp-feedback-banner {
+  margin: 0 14px 14px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #F1F5F9;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.banner-success { background: #D1FAE5; color: #065F46; }
+.banner-warning { background: #FEF3C7; color: #92400E; }
+.banner-danger { background: #FEE2E2; color: #991B1B; }
+
+/* Big Truck Slider Boss Styles */
+.helper-boost-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.helper-chip {
+  background: #EFF6FF;
+  border: 1px solid #93C5FD;
+  color: #1E3A8A;
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+}
+
+.speed-chip {
+  background: #FEF3C7;
+  border-color: #F59E0B;
+  color: #92400E;
+  font-weight: 800;
+}
+
+.slider-crates-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  padding: 10px 14px;
+}
+
+.crate-slot-card {
+  background: #F1F5F9;
+  border: 2px solid #CBD5E1;
+  border-radius: 8px;
+  padding: 5px 4px;
+  text-align: center;
+  font-size: 0.68rem;
+}
+
+.crate-active { border-color: #2563EB; background: #DBEAFE; font-weight: 800; }
+.crate-perfect { border-color: #10B981; background: #D1FAE5; color: #065F46; }
+.crate-red { border-color: #F59E0B; background: #FEF3C7; color: #92400E; }
+.crate-miss { border-color: #EF4444; background: #FEE2E2; color: #991B1B; }
+
+.slider-arena-box {
+  padding: 12px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.slider-legend-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  font-size: 0.72rem;
+  flex-wrap: wrap;
+}
+
+.legend-item { display: flex; align-items: center; gap: 4px; font-weight: 700; }
+.dot-miss { width: 10px; height: 10px; background: #334155; display: inline-block; border-radius: 3px; }
+.dot-red { width: 10px; height: 10px; background: #EF4444; display: inline-block; border-radius: 3px; }
+.dot-green { width: 10px; height: 10px; background: #10B981; display: inline-block; border-radius: 3px; }
+
+.slider-track-outer {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  background: #1E293B;
+  border: 3px solid #0F172A;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.slider-zone-red {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(45deg, #EF4444, #EF4444 8px, #DC2626 8px, #DC2626 16px);
+}
+
+.slider-zone-green {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, #34D399 0%, #059669 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFF;
+  font-weight: 900;
+  font-size: 0.75rem;
+}
+
+.slider-needle-pointer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.needle-head {
+  color: #FBBF24;
+  font-size: 1rem;
+  line-height: 1;
+  margin-left: -5px;
+}
+
+.needle-line {
+  width: 4px;
+  height: 100%;
+  background: #FBBF24;
+  box-shadow: 0 0 8px #FFF;
+}
+
+.slider-feedback-box {
+  text-align: center;
+  padding: 7px;
+  border-radius: 8px;
+  background: #F1F5F9;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.outcome-perfect { background: #D1FAE5; color: #065F46; }
+.outcome-red { background: #FEF3C7; color: #92400E; }
+.outcome-miss { background: #FEE2E2; color: #991B1B; }
+
+.btn-unload-giant {
+  background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+  color: #FFF;
+  border: 3px solid var(--am-gold);
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 1.05rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+/* Small Truck Spatial Puzzle Styles */
+.tetris-instructions-row {
+  padding: 8px 14px;
+  background: #FFFBEB;
+  border-bottom: 1px solid #FDE68A;
+  font-size: 0.74rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.small-truck-blueprint {
+  margin: 8px 14px;
+  background: #1E293B;
+  border: 2px solid #334155;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  gap: 8px;
+  color: #FFF;
+}
+
+.truck-cab-front {
+  width: 64px;
+  background: linear-gradient(180deg, #D97706 0%, #B45309 100%);
+  border: 2px solid #FBBF24;
+  border-radius: 10px 4px 4px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 4px;
+  flex-shrink: 0;
+}
+
+.cab-window { font-size: 1.2rem; }
+.cab-label { font-size: 0.56rem; font-weight: 900; text-align: center; }
+
+.truck-cargo-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.truck-zone-section {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px dashed #64748B;
+  border-radius: 8px;
+  padding: 5px 6px;
+}
+
+.zone-top-rack { border-color: #60A5FA; }
+.zone-bottom-bed { border-color: #34D399; flex: 1; }
+.zone-half-tailgate { border-color: #FBBF24; flex: 1; }
+
+.zone-title-banner {
+  font-size: 0.64rem;
+  font-weight: 800;
+  color: #E2E8F0;
+  margin-bottom: 4px;
+}
+
+.truck-lower-deck-split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.truck-slots-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.truck-grid-slot {
+  background: #0F172A;
+  border: 1.5px solid #475569;
+  border-radius: 7px;
+  padding: 4px;
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.slot-ready-glow {
+  border-color: #34D399;
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.45);
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.slot-header-tag { font-size: 0.56rem; color: #94A3B8; font-weight: 700; }
+.slot-placeholder { display: flex; flex-direction: column; align-items: center; font-size: 0.62rem; color: #CBD5E1; }
+
+.placed-scooter-token {
+  background: #1E293B;
+  border: 1.5px solid #FFF;
+  border-radius: 5px;
+  padding: 2px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.sc-token-name { font-size: 0.6rem; font-weight: 800; color: #F8FAFC; }
+.sc-undo-hint { font-size: 0.5rem; color: #94A3B8; }
+.truck-wheels-rear { display: flex; justify-content: space-around; font-size: 1rem; }
+
+.tetris-feedback-bar {
+  margin: 0 14px 6px;
+  padding: 6px 10px;
+  border-radius: 7px;
+  font-size: 0.74rem;
+}
+
+.fb-info { background: #EFF6FF; color: #1E3A8A; }
+.fb-success { background: #D1FAE5; color: #065F46; }
+.fb-warn { background: #FEF3C7; color: #92400E; }
+.fb-danger { background: #FEE2E2; color: #991B1B; }
+
+.scooter-pool-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 0 14px 14px;
+}
+
+.scooter-pool-card {
+  background: #F8FAFC;
+  border: 2px solid #CBD5E1;
+  border-radius: 8px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.selected-scooter-card {
+  border-color: #2563EB;
+  background: #EFF6FF;
+}
+
+.sc-card-top { display: flex; align-items: center; gap: 4px; }
+.sc-num-badge { color: #FFF; font-size: 0.6rem; font-weight: 800; padding: 1px 5px; border-radius: 4px; }
+.sc-model-title { font-size: 0.68rem; color: #0F172A; }
+.sc-stance-pill { font-size: 0.6rem; font-weight: 800; padding: 2px 4px; border-radius: 5px; text-align: center; }
+
+.btn-rotate-sc {
+  background: #1E293B;
+  color: #FFF;
+  border: none;
+  border-radius: 5px;
+  padding: 4px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Repair Mini-Games Styles */
+.wiring-board-stage,
+.battery-stage-box {
+  position: relative;
+  margin: 10px 14px;
+  background: #0F172A;
+  border: 3px solid #334155;
+  border-radius: 14px;
+  min-height: 250px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.wiring-svg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.wiring-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  z-index: 5;
+  gap: 8px;
+}
+
+.wire-node-socket {
+  background: #1E293B;
+  border: 2.5px solid #FFF;
+  border-radius: 10px;
+  padding: 7px 10px;
+  color: #F8FAFC;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.node-selected { box-shadow: 0 0 12px #FBBF24; transform: scale(1.04); }
+.node-connected { opacity: 0.85; background: #064E3B; }
+.wire-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #FFF; }
+
+.battery-stage-box { flex-direction: column; justify-content: space-between; }
+.battery-leads-row { display: flex; justify-content: space-around; z-index: 5; gap: 10px; }
+
+.battery-lead-clamp {
+  background: #1E293B;
+  border: 2.5px solid #94A3B8;
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.lead-pos { border-color: #EF4444; }
+.lead-neg { border-color: #94A3B8; }
+.clamp-selected { box-shadow: 0 0 14px #FBBF24; transform: scale(1.04); }
+.clamp-locked { background: #064E3B; border-color: #10B981; }
+
+.lithium-battery-body {
+  background: linear-gradient(180deg, #1E293B 0%, #090D16 100%);
+  border: 2.5px solid #475569;
+  border-radius: 12px;
+  padding: 10px;
+  z-index: 5;
+}
+
+.battery-terminals-bar { display: flex; align-items: center; justify-content: space-around; margin-bottom: 6px; }
+
+.battery-post {
+  background: #334155;
+  border: 2.5px solid #CBD5E1;
+  border-radius: 10px;
+  padding: 6px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  color: #FFF;
+}
+
+.post-pos { border-color: #EF4444; background: rgba(239, 68, 68, 0.2); }
+.post-neg { border-color: #94A3B8; }
+.post-locked { border-color: #10B981; background: rgba(16, 185, 129, 0.25); }
+.post-symbol { font-size: 1.3rem; font-weight: 900; }
+.post-label { font-size: 0.64rem; font-weight: 800; }
+
+.battery-volt-readout {
+  background: #000;
+  border: 2px solid #334155;
+  padding: 5px 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-family: monospace;
+}
+
+.battery-volt-readout span { display: block; font-size: 1rem; font-weight: 900; color: #FBBF24; }
+.battery-volt-readout small { font-size: 0.6rem; color: #94A3B8; }
+.battery-casing-brand { text-align: center; font-size: 0.66rem; font-weight: 800; color: #FBBF24; }
+
+.hardware-split-stage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 10px 14px;
+}
+
+@media (max-width: 640px) {
+  .hardware-split-stage { grid-template-columns: 1fr; }
+}
+
+.hardware-screw-panel,
+.hardware-couplers-panel {
+  background: #F8FAFC;
+  border: 2px solid #CBD5E1;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.bolt-selector-tabs { display: flex; gap: 5px; width: 100%; }
+.bolt-tab-btn { flex: 1; background: #E2E8F0; border: 2px solid #94A3B8; border-radius: 8px; padding: 5px 4px; font-size: 0.7rem; font-weight: 800; cursor: pointer; }
+.bolt-tab-btn.active-bolt { border-color: #2563EB; background: #DBEAFE; color: #1E3A8A; }
+.bolt-tab-btn.bolt-done { border-color: #10B981; background: #D1FAE5; color: #065F46; }
+
+.circular-screw-arena {
+  width: 155px;
+  height: 155px;
+  background: #0F172A;
+  border-radius: 50%;
+  border: 4px dashed #3B82F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+}
+
+.screw-orbit-ring { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.screw-direction-hint { font-size: 0.62rem; color: #93C5FD; font-weight: 700; }
+
+.screw-head-hex {
+  width: 76px;
+  height: 76px;
+  background: linear-gradient(135deg, #94A3B8, #475569);
+  border: 3px solid #E2E8F0;
+  border-radius: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screw-slot-line { position: absolute; width: 70%; height: 7px; background: #1E293B; border-radius: 4px; }
+.screw-slot-line.cross { transform: rotate(90deg); }
+.screw-quick-hint { font-size: 0.66rem; color: #64748B; text-align: center; }
+
+.couplers-list { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+.coupler-snap-card { width: 100%; background: #FFFFFF; border: 2px solid #94A3B8; border-radius: 10px; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 4px; text-align: left; }
+.coupler-snapped { border-color: #10B981; background: #ECFDF5; }
+.coupler-plugs-visual { font-family: monospace; font-size: 0.88rem; font-weight: 900; text-align: center; color: #334155; }
+.plug-snapped { color: #059669; }
+.coupler-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; }
+.coupler-badge { background: #FEF3C7; color: #92400E; padding: 2px 7px; border-radius: 99px; font-size: 0.64rem; font-weight: 800; }
+.minigame-status-footer { padding: 9px 14px; background: #F1F5F9; border-top: 1px solid #CBD5E1; text-align: center; font-size: 0.8rem; }
+
+/* Summary, Pause & Helper Modals */
+.boss-summary-stats,
+.summary-ledger-grid,
+.staff-cards-list,
+.sim-picker-grid {
+  padding: 12px 14px;
+  display: grid;
+  gap: 8px;
+}
+
+.boss-summary-stats { grid-template-columns: repeat(3, 1fr); }
+.stat-box { padding: 10px; border-radius: 10px; text-align: center; display: flex; flex-direction: column; }
+.stat-val { font-size: 1.35rem; font-weight: 900; }
+.stat-lbl { font-size: 0.7rem; }
+.perfect-box { background: #D1FAE5; color: #065F46; }
+.warn-box { background: #FEF3C7; color: #92400E; }
+.danger-box { background: #FEE2E2; color: #991B1B; }
+
+.net-profit-callout { margin: 0 14px 12px; padding: 10px; border-radius: 10px; text-align: center; font-size: 0.95rem; }
+.net-profit-callout.pos { background: #ECFDF5; color: #065F46; }
+.net-profit-callout.neg { background: #FEF2F2; color: #991B1B; }
+
+.ledger-item { display: flex; justify-content: space-between; padding: 7px 10px; background: #F8FAFC; border-radius: 8px; font-size: 0.82rem; }
+.ledger-item.total-row { background: #EFF6FF; border: 1px solid #93C5FD; font-size: 0.9rem; }
+.next-day-preview-box { margin: 0 14px 10px; padding: 9px 11px; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 10px; display: flex; flex-direction: column; font-size: 0.76rem; }
+.modal-footer-btns { padding: 0 14px 14px; display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+
+.btn-primary-lg {
+  background: linear-gradient(135deg, #059669, #047857);
+  color: #FFF;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 0.88rem;
+  cursor: pointer;
+  margin: 0 14px 14px;
+}
+
+.modal-footer-btns .btn-primary-lg { margin: 0; }
+
+.btn-secondary-md,
+.btn-secondary-sm,
+.btn-primary-sm {
+  background: #E2E8F0;
+  color: #1E293B;
+  border: 1px solid #94A3B8;
+  padding: 7px 11px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.btn-primary-sm { background: #2563EB; color: #FFF; border-color: #1D4ED8; margin-top: 5px; }
+
+.staff-member-card { display: flex; gap: 10px; background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 12px; padding: 10px; align-items: center; }
+.staff-avatar { font-size: 2rem; background: #EFF6FF; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.staff-details h4 { font-size: 0.86rem; margin-bottom: 2px; }
+.staff-details p { font-size: 0.72rem; color: #475569; line-height: 1.3; }
+
+.sim-picker-grid { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 600px) { .sim-picker-grid { grid-template-columns: 1fr; } }
+.sim-card-btn { background: #F8FAFC; border: 2px solid #CBD5E1; border-radius: 10px; padding: 10px; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 3px; }
+
+/* Toast Notification Tray */
+.toast-notification-tray {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 90%;
+  max-width: 340px;
+  pointer-events: none;
+}
+
+.game-toast {
+  padding: 8px 14px;
+  border-radius: 99px;
+  color: #FFF;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.toast-success { background: rgba(5, 150, 105, 0.95); border: 1.5px solid #A7F3D0; }
+.toast-danger { background: rgba(220, 38, 38, 0.95); border: 1.5px solid #FECACA; }
+.toast-info { background: rgba(15, 23, 42, 0.92); border: 1.5px solid #38BDF8; }
+.toast-fade-out { opacity: 0; transform: translateY(-8px); }

@@ -1,0 +1,31 @@
+{
+  "name": "jashans-simulator-am",
+  "version": "1.0.0",
+  "description": "Jashan's Simulator (AM) - 2D Simulation & Time-Management Mobile RPG based on Aulakh Motors Electric Scooter Dealership",
+  "main": "www/index.html",
+  "scripts": {
+    "start": "npx serve www",
+    "cap:init": "npx cap init \"Jashan Simulator AM\" com.aulakhmotors.jashansim --web-dir=www",
+    "cap:add:android": "npx cap add android",
+    "cap:sync": "npx cap sync android",
+    "cap:copy": "npx cap copy android",
+    "build:apk": "npx cap sync android && cd android && ./gradlew assembleDebug"
+  },
+  "keywords": [
+    "capacitor",
+    "mobile-rpg",
+    "simulation",
+    "time-management",
+    "aulakh-motors",
+    "electric-scooter"
+  ],
+  "author": "Aulakh Motors Game Studio",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0"
+  }
+}

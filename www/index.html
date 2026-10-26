@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Jashan’s Simulator (AM) — Aulakh Motors 3D</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <!-- ========================================================================
+       FULL-SCREEN 3D WORLD CANVAS (position: absolute; 100vw x 100vh; z-index: 0)
+       ======================================================================== -->
+  <div id="three-canvas-container"></div>
+
+  <!-- FLOATING 3D CUSTOMER PATIENCE METERS (Projected over 3D Customer Heads) -->
+  <div class="floating-3d-labels-layer" id="floating-3d-labels-layer">
+    <button type="button" class="floating-3d-cust-badge" id="floating-cust-tag-0" data-chair="0" style="display:none;">
+      <span id="floating-cust-name-0">Customer</span>
+      <div class="floating-bar-track"><div class="floating-bar-fill" id="floating-cust-bar-0"></div></div>
+    </button>
+    <button type="button" class="floating-3d-cust-badge" id="floating-cust-tag-1" data-chair="1" style="display:none;">
+      <span id="floating-cust-name-1">Customer</span>
+      <div class="floating-bar-track"><div class="floating-bar-fill" id="floating-cust-bar-1"></div></div>
+    </button>
+    <button type="button" class="floating-3d-cust-badge" id="floating-cust-tag-2" data-chair="2" style="display:none;">
+      <span id="floating-cust-name-2">Customer</span>
+      <div class="floating-bar-track"><div class="floating-bar-fill" id="floating-cust-bar-2"></div></div>
+    </button>
+    <button type="button" class="floating-3d-cust-badge" id="floating-cust-tag-3" data-chair="3" style="display:none;">
+      <span id="floating-cust-name-3">Customer</span>
+      <div class="floating-bar-track"><div class="floating-bar-fill" id="floating-cust-bar-3"></div></div>
+    </button>
+  </div>
+
+  <!-- ========================================================================
+       SCREEN 1: MAIN MENU (Clean Full-Screen Overlay over Live 3D Dealership)
+       ======================================================================== -->
+  <section class="ui-screen active-screen" id="screen-main-menu">
+    <div class="main-menu-card">
+      <div class="am-tiger-emblem">🐯</div>
+      <div class="am-brand-tag">ELECTRIC SCOOTER DEALERSHIP RPG</div>
+      <h1 class="am-main-title">AULAKH MOTORS</h1>
+      <p class="am-subtitle">Jashan’s Simulator (AM)</p>
+
+      <button type="button" class="btn-start-game-hero" id="btn-main-start-game">
+        ▶ START GAME
+      </button>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SCREEN 2: DAY SELECTION (Clean 90-Day Grid • Locked Days Grayed Out)
+       ======================================================================== -->
+  <section class="ui-screen" id="screen-day-select">
+    <div class="day-select-dialog">
+      <div class="day-select-header">
+        <button type="button" class="btn-icon-circle" id="btn-back-to-title" title="Back to Main Menu">←</button>
+        <div class="day-select-title-group">
+          <h2>SELECT DAY (1 – 90)</h2>
+          <small>Finish Day N to unlock Day N+1 • Boss Events on Days 6, 12, 15, 45, 75</small>
+        </div>
+        <button type="button" class="btn-practice-pill" id="btn-open-practice-menu" title="Test Any Event">⚡ Practice</button>
+      </div>
+
+      <div class="day-select-grid" id="day-select-grid"></div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SCREEN 3: ACTIVE GAMEPLAY (Minimal Floating Overlays on Full-Screen 3D)
+       ======================================================================== -->
+  <section class="ui-screen gameplay-overlay-screen" id="screen-gameplay">
+    <!-- TOP LEFT: Minimal HUD (Current Day, Stamina Bar, Treasury + Objective Pill) -->
+    <div class="hud-top-left">
+      <div class="hud-top-row">
+        <span class="hud-day-chip" id="hud-day-badge">DAY 1</span>
+        <span class="hud-cash-chip" id="hud-cash-val">₹12,500</span>
+      </div>
+      <div class="hud-stamina-row">
+        <span class="stam-bolt">⚡</span>
+        <div class="hud-stamina-track">
+          <div class="hud-stamina-bar" id="hud-stamina-fill" style="width: 100%;"></div>
+        </div>
+        <span class="stam-pct" id="hud-stamina-text">100%</span>
+      </div>
+      <div class="hud-objective-chip" id="hud-objective-chip">
+        🔐 Walk to Shutter &amp; Tap INTERACT
+      </div>
+    </div>
+
+    <!-- TOP RIGHT: Small Pause / Settings Icon -->
+    <div class="hud-top-right">
+      <button type="button" class="btn-pause-icon" id="btn-pause-settings" title="Pause / Settings">⚙️</button>
+    </div>
+
+    <!-- RIGHT SCREEN TOUCH ZONE: Drag anywhere on right half to rotate 3D camera around Jashan -->
+    <div class="camera-look-zone" id="camera-look-zone"></div>
+
+    <!-- BOTTOM LEFT: Transparent Virtual Joystick -->
+    <div class="virtual-joystick-zone" id="virtual-joystick-zone">
+      <div class="virtual-joystick-base" id="virtual-joystick-base">
+        <div class="joystick-compass-ring"></div>
+        <div class="virtual-joystick-knob" id="virtual-joystick-knob"></div>
+      </div>
+    </div>
+
+    <!-- BOTTOM RIGHT: Large Context-Sensitive "INTERACT" Button -->
+    <button type="button" class="btn-3d-interact interact-hidden" id="btn-3d-interact">
+      <span class="interact-icon" id="interact-btn-icon">✋</span>
+      <div class="interact-copy">
+        <strong id="interact-btn-label">INTERACT</strong>
+        <small id="interact-btn-sub">Tap</small>
+      </div>
+    </button>
+  </section>
+
+  <!-- ========================================================================
+       CENTERED POPUP MODAL LAYER (OTP Lock, Repair Mini-Games, Boss Events, Pause)
+       Appears over the blurred 3D background
+       ======================================================================== -->
+  <div id="modal-layer"></div>
+
+  <!-- FLOATING TOAST NOTIFICATIONS -->
+  <div class="toast-notification-tray" id="toast-notification-tray"></div>
+
+  <!-- CORE SCRIPTS -->
+  <script src="js/state.js"></script>
+  <script src="js/joystick.js"></script>
+  <script src="js/scene.js"></script>
+  <script src="js/otp.js"></script>
+  <script src="js/slider.js"></script>
+  <script src="js/tetris.js"></script>
+  <script src="js/minigames.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
